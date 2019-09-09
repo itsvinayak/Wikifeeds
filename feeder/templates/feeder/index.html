@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>wikifeed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <style media="screen">
+    body {
+      overflow-x: hidden;
+      background-color: #f2f2f2;
+    }
+
+    .banner {
+      margin: 2%;
+
+    }
+
+    .card {
+      background-color: white;
+      border: 1px solid black;
+      box-shadow: 10px 10px 10px 5px #aaaaaa;
+      margin-left:5%;
+      margin-right:5%;
+
+
+
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+
+    <div class=" row banner">
+      <h1> wikifeed </h1>
+      <br />
+      <small class="text-muted">turn wikipedia into feeds</small>
+    </div>
+
+
+    <nav class="navbar navbar-expand-xl bg-dark navbar-dark sticky-top" style="margin:24px 0;">
+      <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand mb-0 h1" href="#home">&nbsp;</a>
+
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item ">
+              <a class="nav-link" href="{% url "home" %}">home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "about" %}">about</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">contact us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  </header>
+
+  {% block start %}
+  {% if data %}
+  {% for i in data %}
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 card bg-light border-dark">
+      <div class="card-body">
+        <div class="card-header">
+          <center>
+            <h1>{{i.title}}</h1>
+          </center>
+        </div>
+        <br/>
+        <img src="{{i.img}}" height="300px" width="100%">
+        <hr />
+        <p>{{i.text|safe}}</p>
+        <a href="{{i.url}}" class="text-muted" style="text-align:right; padding:2%;"> read more at ... </a>
+      </div>
+    </div>
+  </div>
+  <br />
+  <br />
+  <br />
+  {% endfor %}
+  {% endif %}
+  {% endblock %}
+
+  <footer class="row">
+
+  </footer>
+
+</body>
+
+</html>
