@@ -3,19 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <title>wikifeed</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-  <!-- Popper JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-
-  <!-- Latest compiled JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <style media="screen">
     body {
@@ -27,14 +20,24 @@
       margin: 2%;
 
     }
-
+    .image{
+      height:20rem;
+      width:40rem;
+      display:block;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid black;
+      padding: 2px;
+      margin-top:10px;
+      margin-bottom: 10px;
+    }
     .card {
       background-color: white;
       border: 1px solid black;
       box-shadow: 10px 10px 10px 5px #aaaaaa;
       margin-left:5%;
       margin-right:5%;
-
+      width:100%;
 
 
     }
@@ -81,35 +84,65 @@
   </header>
 
   {% block start %}
-  {% if data %}
-  {% for i in data %}
-  <div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6 card bg-light border-dark">
-      <div class="card-body">
-        <div class="card-header">
-          <center>
-            <h1>{{i.title}}</h1>
-          </center>
-        </div>
-        <br/>
-        <img src="{{i.img}}" height="300px" width="100%">
-        <hr />
-        <p>{{i.text|safe}}</p>
-        <a href="{{i.url}}" class="text-muted" style="text-align:right; padding:2%;"> read more at ... </a>
-      </div>
-    </div>
-  </div>
-  <br />
-  <br />
-  <br />
-  {% endfor %}
-  {% endif %}
+  <div class="feed"></div>
   {% endblock %}
 
   <footer class="row">
 
   </footer>
+
+
+
+  <script>
+    //---------------------------scroll ------------------------------//
+    feeds()
+    var lastScrollPosition = 0;
+    window.load = function(event) {
+      if ((document.body.scrollTop >= 0) && (lastScrollPosition < 0)) {
+        feeds();
+      }
+      lastScrollPosition = document.body.scrollTop;
+    }
+
+    //------------------------------display ---------------------------------//
+
+    function display(data) {
+
+      $.each(data, function(key, value) {
+
+        console.log(value);
+        $(".feed").append('<div class="row"><div class="  card bg-light border-dark"><div class="card-body"><div class="card-header"><center><h1>'+ value["fields"]["title"] + '</h1></center></div><br/><img src="'+ value["fields"]["img"] +'" class="image img-fluid"/><hr /><p>'+value["fields"]["text"]+'</p><br/> <a  href= "' + value["fields"]["url"] +'" class="text-muted" > read more ... </a> <br/><hr/> </div></div></div> <br/><br/><br/>');
+
+        //
+        //
+        // $("h1").append(value["fields"]["title"] + '<br/>');
+        // $("<img>").attr('src', value["fields"]["img"]).appendTo(".image");
+        // $("p").append('<br/>'+value["fields"]["text"]+'<br/>');
+        // $(".link").append(;
+
+      });
+    }
+
+
+
+    //--------------------------------------ajax -------------------------------//
+    function feeds() {
+
+      $.ajax({
+        url: './getfeeds/',
+        type: 'POST',
+        dataType: "json",
+      }).done(function(Data) {
+        var data = JSON.parse(Data['data']);
+        display(data);
+      }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
+        console.log(XMLHttpRequest);
+        alert("error");
+      });
+
+    }
+  </script>
+
 
 </body>
 
